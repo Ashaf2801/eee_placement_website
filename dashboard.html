@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Department of EEE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+        }
+        
+        .login-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            height: 80px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        h1 {
+            color: #3498db;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #fadbd8;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #27ae60;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #d5f4e6;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .login-options {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .login-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .login-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            background: #2ecc71;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #27ae60;
+        }
+        
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 20px;
+            }
+            
+            .logo img {
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Itechlogo.png/738px-Itechlogo.png" alt="PSG iTech Logo">
+            </div>
+            <h2>Department of EEE</h2>
+            <h1>Login</h1>
+            
+            <div id="error-message" class="error-message"></div>
+            <div id="success-message" class="success-message"></div>
+            
+            <form id="loginForm">
+                <div class="login-options">
+                    <button type="button" id="staffBtn" class="login-btn active" onclick="switchLoginType('staff')">Staff Login</button>
+                    <button type="button" id="studentBtn" class="login-btn" onclick="switchLoginType('student')">Student Login</button>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                
+                <input type="hidden" id="userType" name="userType" value="staff">
+                
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Function to switch between staff and student login
+        function switchLoginType(type) {
+            const staffBtn = document.getElementById('staffBtn');
+            const studentBtn = document.getElementById('studentBtn');
+            const userType = document.getElementById('userType');
+            
+            if (type === 'staff') {
+                staffBtn.classList.add('active');
+                studentBtn.classList.remove('active');
+                userType.value = 'staff';
+            } else {
+                staffBtn.classList.remove('active');
+                studentBtn.classList.add('active');
+                userType.value = 'student';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('userType').value;
+            
+            // Simple validation (replace with your actual authentication logic)
+            if (username && password) {
+                // Show success message
+                document.getElementById('success-message').textContent = 'Login successful! Redirecting...';
+                document.getElementById('success-message').style.display = 'block';
+                document.getElementById('error-message').style.display = 'none';
+                
+                // Simulate authentication process
+                setTimeout(function() {
+                    // Redirect to dashboard page
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } else {
+                // Show error message
+                document.getElementById('error-message').textContent = 'Please enter both username and password.';
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('success-message').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
