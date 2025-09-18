@@ -79,6 +79,101 @@
             object-fit: cover;
         }
         
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .mobile-menu-content {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: #2c3e50;
+            transition: right 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active .mobile-menu-content {
+            right: 0;
+        }
+        
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .mobile-nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mobile-nav-links a:hover {
+            background-color: #34495e;
+        }
+        
+        .mobile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #34495e;
+            border-radius: 8px;
+        }
+        
+        .mobile-user-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
         /* Main Content Styles */
         .container {
             max-width: 1200px;
@@ -235,18 +330,19 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .navbar {
-                flex-direction: column;
-                padding: 15px;
+                padding: 15px 20px;
             }
             
             .nav-links {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
+                display: none;
             }
             
             .user-info {
-                margin-top: 15px;
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
             }
             
             .tree-container {
@@ -260,6 +356,36 @@
             .stats-container {
                 grid-template-columns: 1fr;
             }
+            
+            .dashboard-header h1 {
+                font-size: 28px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 12px 15px;
+            }
+            
+            .logo {
+                height: 40px;
+            }
+            
+            .nav-title {
+                font-size: 18px;
+            }
+            
+            .tree-container {
+                padding: 12px;
+            }
+            
+            .mobile-menu-content {
+                width: 280px;
+            }
         }
     </style>
 </head>
@@ -268,51 +394,45 @@
     <nav class="navbar">
         <div class="logo-container">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Itechlogo.png/738px-Itechlogo.png" alt="PSG iTech Logo" class="logo">
-            <div class="nav-title">Department of EEE - Placement Portal</div>
         </div>
         <div class="nav-links">
-            <a href="#"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="#"><i class="fas fa-book"></i> Resources</a>
-            <a href="#"><i class="fas fa-pencil-alt"></i> Practice</a>
-            <a href="#"><i class="fas fa-calendar"></i> Schedule</a>
-            <a href="#"><i class="fas fa-chart-bar"></i> Results</a>
+            <a href="#"><i class="fas fa-book"></i> PLACED EXPERIENCE</a>
+            <a href="#"><i class="fas fa-pencil-alt"></i> PREP WITH AI</a>
         </div>
         <div class="user-info">
             <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
             <span>John Doe</span>
         </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
     </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-header">
+                <h3>Menu</h3>
+                <button class="mobile-menu-close" id="mobileMenuClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="mobile-nav-links">
+                <a href="#"><i class="fas fa-book"></i> PLACED EXPERIENCE</a>
+                <a href="#"><i class="fas fa-pencil-alt"></i> PREP WITH AI</a>
+            </div>
+            <div class="mobile-user-info">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                <div>
+                    <div style="font-weight: bold;">John Doe</div>
+                    <div style="font-size: 14px; color: #bdc3c7;">Student</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="container">
-        <div class="dashboard-header">
-            <h1>Placement Preparation Guide</h1>
-            <p>Comprehensive resources for EEE students</p>
-        </div>
-
-        <!-- Stats Section -->
-        <div class="stats-container">
-            <div class="stat-card">
-                <i class="fas fa-book"></i>
-                <h3>128</h3>
-                <p>Study Materials</p>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-question-circle"></i>
-                <h3>542</h3>
-                <p>Practice Questions</p>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-calendar-check"></i>
-                <h3>24</h3>
-                <p>Upcoming Companies</p>
-            </div>
-            <div class="stat-card">
-                <i class="fas fa-user-graduate"></i>
-                <h3>87%</h3>
-                <p>Placement Rate</p>
-            </div>
-        </div>
 
         <!-- Tree Structure -->
         <div class="tree-container">
@@ -328,10 +448,11 @@
                             <span class="toggle">+</span>
                             <span class="content">ELECTRICAL</span>
                             <ul>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">Electrical Machines</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">Power Electronics</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">Power Systems</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">ELECTRICAL MACHINES</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">POWER ELECTRONICS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">POWER SYSTEM</span></li>
                                 <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROTECTION SWITCH GEAR</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PLC</span></li>
                             </ul>
                         </li>
                         <li>
@@ -399,21 +520,12 @@
                             <span class="toggle">+</span>
                             <span class="content">SOFTWARE CORE</span>
                             <ul>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">COMPUTER NETWORKS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">OOPS</span></li>
                                 <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DATABASE MANAGEMENT SYSTEM</span></li>
                                 <li><span class="toggle" style="visibility: hidden;"></span><span class="content">OPERATING SYSTEM</span></li>
-                                <li>
-                                    <span class="toggle">+</span>
-                                    <span class="content">MISCELLANEOUS</span>
-                                    <ul>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">FIFO DEPTH CALCULATIONS</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">STUCK AT FAULT</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CLOCK DOMAIN CROSSING</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">BASIC CIRCUIT THEORY</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">LOW POWER DESIGN TECHNIQUES</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">UNDERSTANDING VLSI DESIGN FLOWS</span></li>
-                                    </ul>
-                                </li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">COMPUTER NETWORKS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CLOUD COMPUTING</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DEVELOPMENT</span></li>
                             </ul>
                         </li>
                         
@@ -422,18 +534,9 @@
                             <span class="toggle">+</span>
                             <span class="content">PROGRAMMING</span>
                             <ul>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">C PROGRAMMING</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">VERILOG HDL</span></li>
-                                <li>
-                                    <span class="toggle">+</span>
-                                    <span class="content">PROGRAMMING LANGUAGES</span>
-                                    <ul>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PYTHON</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">C</span></li>
-                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">C++</span></li>
-                                    </ul>
-                                </li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">OBJECT ORIENTED PROGRAMMING CONCEPTS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">C/C++ PROGRAMMING</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">JAVA</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PYTHON</span></li>
                                 <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DATA STRUCTURES AND ALGORITHM</span></li>
                             </ul>
                         </li>
@@ -450,34 +553,90 @@
                             <span class="toggle">+</span>
                             <span class="content">QUANTITATIVE</span>
                             <ul>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">NUMBERS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PERCENTAGES</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">RATIOS AND PROPORTION</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">AVERAGES</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">BOATS AND STREAMS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROBLEMS ON TRAINS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">TIME AND WORK</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PIPES AND CISTERN</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PERMUATION AND COMBINATION</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROFIT AND LOSS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SIMPLE INTEREST</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">COMPOUND INTEREST</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DISCOUNTS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CATEOGRY-3 (PROBABILITY)</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CATEOGRY-4 (MISCELLANEOUS)</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROBLEMS ON AGES</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">ALLEGATIONS AND MIXTURE</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PARTNERSHIP</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CATEORY-1 (RELATED TO PERCENTAGES)</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">BLOOD RELATIONS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">TIME AND DISTANCE</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CATEORY-2 (RELATED TO DISTANCE,SPEED)</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SIMPLE EQUATIONS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">LCM AND HCF</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">TRIGONOMETRY AND LOGARITHMS</span></li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">FUNDAMENTALS</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">NUMBERS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SIMPLE EQUATIONS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">RATIO AND PREPARATION</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">AVERAGES</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PERCENTAGE</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">LCM AND HCF</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">PERCENTAGE(RELATED)</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROFIT AND LOSS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DISCOUNTS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SIMPLE INTEREST</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">COMPUND INTEREST</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">SPEED, DISTANCE AND TIME</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SPEED, DISTANCE AND TIME</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROBLEMS RELATED TO TRAIN</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">BOATS AND STREAMS</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">TIME AND WORK</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">TIME AND WORK</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PIPES AND CISTERN</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">PROBABILITY</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PERMUTATION AND COMBINATION</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROBABILITY</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">DATA INTERPREATION</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">TABLES</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">BAR CHARTS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">GRAPHS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PIE CHARTS</span></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <span class="toggle">+</span>
+                                    <span class="content">MISCELLANEOUS</span>
+                                    <ul>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROBLEMS ON AGE</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">MIXTURES AND ALLIGATIONS</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PARNERSHIP</span></li>
+                                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">TRIGNOMENTRY AND LOGARITHM</span></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         
+                        <!-- LOGICAL -->
+                        <li>
+                            <span class="toggle">+</span>
+                            <span class="content">LOGICAL</span>
+                            <ul>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DIRECTIONS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">BLOOD RELATIONS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SYLLOGISMS</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CODING AND DECODING</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">NUMBERS AND LETTERS SERIES</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DATA SUFFICIENCY</span></li>
+                            </ul>
+                        </li>
+
                         <!-- VERBAL -->
                         <li>
                             <span class="toggle">+</span>
@@ -493,19 +652,14 @@
                             </ul>
                         </li>
                         
-                        <!-- LOGICAL -->
                         <li>
                             <span class="toggle">+</span>
-                            <span class="content">LOGICAL</span>
+                            <span class="content">MISCELLANEOUS</span>
                             <ul>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DIRECTIONS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SYLLOGISMS</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">CODING AND DECODING</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">NUMBERS AND LETTERS SERIES</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DATA INTERPREATION (TABLES,BAR GRAPHS,PIE CHARTS)</span></li>
-                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">DATA SUFFICIENCY</span></li>
+                                <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PUZZLES</span></li>
                             </ul>
                         </li>
+
                     </ul>
                 </li>
                 
@@ -514,10 +668,10 @@
                     <span class="toggle">+</span>
                     <span class="content">INTERVIEW PREPARATION</span>
                     <ul>
-                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SELF INTRODUCTION PREPARATION</span></li>
-                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">GROUP DISCUSSION PREPARATION</span></li>
-                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROJECTS</span></li>
                         <li><span class="toggle" style="visibility: hidden;"></span><span class="content">RESUME BUILDING</span></li>
+                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">PROJECTS</span></li>
+                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">SELF INTRO</span></li>
+                        <li><span class="toggle" style="visibility: hidden;"></span><span class="content">GROUP DISCUSSION PREPARATION</span></li>
                         <li><span class="toggle" style="visibility: hidden;"></span><span class="content">MANAGERIAL AND HR ROUND PREPARATION</span></li>
                     </ul>
                 </li>
@@ -526,64 +680,68 @@
     </div>
 
     <footer>
-        <p>Department of EEE - PSG iTech © 2023. All rights reserved.</p>
+        <p>Department of EEE - PSG iTech © 2025. All rights reserved.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get all list items in the tree
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent body scroll
+            });
+
+            mobileMenuClose.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = ''; // Restore body scroll
+            });
+
+            // Close menu when clicking overlay
+            mobileMenu.addEventListener('click', function(e) {
+                if (e.target === mobileMenu) {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Tree functionality
             const treeItems = document.querySelectorAll('#preparationTree li');
             
             treeItems.forEach(item => {
-                const toggle = item.querySelector(':scope > .toggle');
-                const content = item.querySelector(':scope > .content');
-                const childList = item.querySelector(':scope > ul');
+                const toggle = item.querySelector('.toggle');
+                const content = item.querySelector('.content');
+                const childList = item.querySelector('ul');
                 
-                // Only add toggle functionality if there's a direct child ul
-                if (childList) {
-                    // Add click event to toggle button
+                // Only add toggle functionality if there's a nested list with content
+                if (childList && childList.children.length > 0) {
                     toggle.addEventListener('click', function(e) {
-                        e.preventDefault();
                         e.stopPropagation();
-                        toggleItem(item, toggle, childList);
+                        item.classList.toggle('active');
+                        toggle.textContent = item.classList.contains('active') ? '-' : '+';
                     });
                     
-                    // Add click event to content as well
                     content.addEventListener('click', function(e) {
-                        e.preventDefault();
                         e.stopPropagation();
-                        toggleItem(item, toggle, childList);
+                        item.classList.toggle('active');
+                        toggle.textContent = item.classList.contains('active') ? '-' : '+';
                     });
                 } else {
-                    // Hide toggle for items without children
+                    // Remove toggle indicator for items without children
                     toggle.style.visibility = 'hidden';
                     content.style.cursor = 'default';
                 }
             });
             
-            // Function to toggle tree items
-            function toggleItem(item, toggle, childList) {
-                if (item.classList.contains('active')) {
-                    item.classList.remove('active');
-                    toggle.textContent = '+';
-                    childList.style.display = 'none';
-                } else {
-                    item.classList.add('active');
-                    toggle.textContent = '-';
-                    childList.style.display = 'block';
-                }
-            }
-            
             // Auto-expand the first level by default
             const firstLevelItems = document.querySelectorAll('#preparationTree > li');
             firstLevelItems.forEach(item => {
-                const toggle = item.querySelector(':scope > .toggle');
-                const childList = item.querySelector(':scope > ul');
-                if (childList) {
-                    item.classList.add('active');
-                    toggle.textContent = '-';
-                    childList.style.display = 'block';
-                }
+                item.classList.add('active');
+                const toggle = item.querySelector('.toggle');
+                if (toggle) toggle.textContent = '-';
             });
         });
     </script>
