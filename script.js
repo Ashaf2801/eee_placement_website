@@ -112,7 +112,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             
             // Redirect to dashboard.html after successful login
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'dashboard.php';
             }, 1500);
         } else {
             showError(data.message);
