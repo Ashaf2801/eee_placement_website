@@ -4,9 +4,9 @@ header('Content-Type: application/json');
 
 // Database configuration
 define('DB_HOST', 'localhost');
-define('DB_USER', 'your_username');
-define('DB_PASS', 'your_password');
-define('DB_NAME', 'your_database');
+define('DB_USER', 'root'); // Change this to your MySQL username
+define('DB_PASS', ''); // Change this to your MySQL password
+define('DB_NAME', 'eee_placement'); // Updated database name
 
 // Function to create database connection
 function createConnection() {
@@ -33,9 +33,9 @@ function sanitizeInput($data) {
     return htmlspecialchars(strip_tags(trim($data)));
 }
 
-// Function to verify password
-function verifyPassword($inputPassword, $hashedPassword) {
-    return password_verify($inputPassword, $hashedPassword);
+// Function to verify password (plain text comparison for your setup)
+function verifyPassword($inputPassword, $storedPassword) {
+    return $inputPassword === $storedPassword; // Direct comparison since passwords are stored in plain text
 }
 
 // Main login processing
@@ -69,16 +69,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception('Database connection failed');
         }
         
-        // Prepare SQL query based on user type
+        // Map userType to database user_type(s)
         if ($userType === 'staff') {
-            $sql = "SELECT id, username, password, full_name, email, department, status 
-                    FROM staff_users 
-                    WHERE username = :username AND status = 'active'";
+            $allowedTypes = ['faculty'];
         } else {
-            $sql = "SELECT id, student_id, password, full_name, email, department, status 
-                    FROM student_users 
-                    WHERE student_id = :username AND status = 'active'";
+            $allowedTypes = ['student', 'admin']; // Allow admin to login via student button
         }
+        
+        // Prepare SQL query for the user table
+        $sql = "SELECT user_id, password, user_type 
+                FROM user 
+                WHERE user_id = :username AND user_type IN ('" . implode("','", $allowedTypes) . "')";
         
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -90,58 +91,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception('Invalid username or password');
         }
         
-        // Verify password
+        // Verify password (direct comparison)
         if (!verifyPassword($password, $user['password'])) {
             throw new Exception('Invalid username or password');
         }
         
         // Login successful - create session
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_type'] = $userType;
-        $_SESSION['username'] = $userType === 'staff' ? $user['username'] : $user['student_id'];
-        $_SESSION['full_name'] = $user['full_name'];
-        $_SESSION['email'] = $user['email'];
-        $_SESSION['department'] = $user['department'];
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_type'] = $userType; // 'staff' or 'student' (button pressed)
+        $_SESSION['db_user_type'] = $user['user_type']; // actual type from DB: 'faculty', 'student', or 'admin'
+        $_SESSION['username'] = $user['user_id'];
         $_SESSION['login_time'] = time();
         
-        // Log successful login
-        $logSql = "INSERT INTO login_logs (user_id, user_type, username, login_time, ip_address, user_agent) 
-                   VALUES (:user_id, :user_type, :username, NOW(), :ip_address, :user_agent)";
-        $logStmt = $pdo->prepare($logSql);
-        $logStmt->execute([
-            ':user_id' => $user['id'],
-            ':user_type' => $userType,
-            ':username' => $_SESSION['username'],
-            ':ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
-            ':user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown'
-        ]);
+        // Log successful login (optional - you can create a simple log table later if needed)
+        error_log("Successful login: " . $user['user_id'] . " (" . $user['user_type'] . ") at " . date('Y-m-d H:i:s'));
         
         // Return success response
         echo json_encode([
             'success' => true,
             'message' => 'Login successful! Redirecting...',
             'user_type' => $userType,
-            'redirect' => $userType === 'staff' ? 'staff_dashboard.php' : 'student_dashboard.php'
+            'username' => $user['user_id'],
+            'redirect' => 'dashboard.php'
         ]);
         
     } catch (Exception $e) {
         // Log failed login attempt
-        if (isset($pdo) && $pdo) {
-            try {
-                $failLogSql = "INSERT INTO failed_login_attempts (username, user_type, attempt_time, ip_address, user_agent, error_message) 
-                               VALUES (:username, :user_type, NOW(), :ip_address, :user_agent, :error_message)";
-                $failLogStmt = $pdo->prepare($failLogSql);
-                $failLogStmt->execute([
-                    ':username' => $username ?? 'Unknown',
-                    ':user_type' => $userType ?? 'Unknown',
-                    ':ip_address' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
-                    ':user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
-                    ':error_message' => $e->getMessage()
-                ]);
-            } catch (Exception $logError) {
-                error_log("Failed to log failed login attempt: " . $logError->getMessage());
-            }
-        }
+        error_log("Failed login attempt: " . ($username ?? 'Unknown') . " (" . ($userType ?? 'Unknown') . ") - " . $e->getMessage() . " at " . date('Y-m-d H:i:s'));
         
         // Return error response
         echo json_encode([
